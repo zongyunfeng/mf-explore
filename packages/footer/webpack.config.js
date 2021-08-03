@@ -1,7 +1,6 @@
 const {mode, component} = require('webpack-nano/argv')
 const parts = require('./webpack.parts')
 const {merge} = require('webpack-merge')
-const path = require("path");
 
 const deps = require("./package.json").dependencies;
 const sharedDependencies = {
@@ -11,17 +10,8 @@ const sharedDependencies = {
 };
 
 const commonConfig = merge([
-    {
-        mode,
-        output: {
-            publicPath: "http://127.0.0.1:8003/",
-            // clean: true
-        },
-    },
+    parts.basis({mode}),
     parts.loadJavaScript(),
-    {
-        entry: [path.join(__dirname, "src", "bootstrap.js")],
-    },
     parts.page({title: 'Footer'}),
     parts.federateModule({
         name: "footer",
@@ -43,7 +33,7 @@ const developmentConfig = merge([
 
 // const developmentConfig = merge([])
 
-const getConfig = (mode, component) => {
+const getConfig = (mode) => {
     switch (mode) {
         case 'production':
             return merge([commonConfig, productionConfig])

@@ -1,28 +1,18 @@
-const { mode } = require('webpack-nano/argv')
+const {mode} = require('webpack-nano/argv')
 const parts = require('./webpack.parts')
-const { merge } = require('webpack-merge')
-const path = require('path')
+const {merge} = require('webpack-merge')
 
 const deps = require('./package.json').dependencies
 const sharedDependencies = {
     ...deps,
-    react: { singleton: true },
-    'react-dom': { singleton: true },
+    react: {singleton: true},
+    'react-dom': {singleton: true},
 }
 
 const commonConfig = merge([
-    {
-        mode,
-        output: {
-            publicPath: 'http://127.0.0.1:8000/',
-            // clean: true
-        },
-    },
+    parts.basis({mode}),
     parts.loadJavaScript(),
-    {
-        entry: [path.join(__dirname, 'src', 'bootstrap.js')],
-    },
-    parts.page({ title: 'App' }),
+    parts.page({title: 'App'}),
     parts.federateModule({
         name: 'app',
         filename: 'state.js',
@@ -40,11 +30,11 @@ const commonConfig = merge([
 const productionConfig = merge([])
 
 const developmentConfig = merge([
-    { entry: ['webpack-plugin-serve/client'] },
+    {entry: ['webpack-plugin-serve/client']},
     parts.devServer(),
 ])
 
-const getConfig = (mode, component) => {
+const getConfig = (mode) => {
     switch (mode) {
         case 'production':
             return merge([commonConfig, productionConfig])

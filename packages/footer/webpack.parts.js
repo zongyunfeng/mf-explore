@@ -17,6 +17,14 @@ exports.devServer = () => ({
     ]
 })
 
+exports.basis = ({mode}) => ({
+    mode, entry: [path.join(__dirname, 'src', 'bootstrap.js')],
+    output: {
+        publicPath: 'http://127.0.0.1:8003/',
+        // clean: true
+    },
+})
+
 exports.page = ({title}) => ({
     plugins: [new MiniHtmlWebpackPlugin({
         context: {title}
@@ -86,7 +94,7 @@ const APP_SOURCE = path.join(__dirname, "src");
 exports.loadJavaScript = () => ({
     module: {
         rules: [
-            { test: /\.js$/, include: APP_SOURCE, use: "babel-loader" },
+            {test: /\.js$/, include: APP_SOURCE, use: "babel-loader"},
         ],
     },
 });

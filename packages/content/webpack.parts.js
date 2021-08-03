@@ -17,6 +17,14 @@ exports.devServer = () => ({
     ]
 })
 
+exports.basis = ({mode}) => ({
+    mode, entry: [path.join(__dirname, 'src', 'bootstrap.js')],
+    output: {
+        publicPath: 'http://127.0.0.1:8002/',
+        // clean: true
+    },
+})
+
 exports.page = ({title}) => ({
     plugins: [new MiniHtmlWebpackPlugin({
         context: {title}

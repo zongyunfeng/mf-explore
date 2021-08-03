@@ -1,5 +1,5 @@
-const { WebpackPluginServe } = require('webpack-plugin-serve')
-const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin')
+const {WebpackPluginServe} = require('webpack-plugin-serve')
+const {MiniHtmlWebpackPlugin} = require('mini-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const Process = require('process')
 
@@ -16,10 +16,18 @@ exports.devServer = () => ({
     ],
 })
 
-exports.page = ({ title }) => ({
+exports.basis = ({mode}) => ({
+    mode, entry: [path.join(__dirname, 'src', 'bootstrap.js')],
+    output: {
+        publicPath: 'http://127.0.0.1:8001/',
+        // clean: true
+    },
+})
+
+exports.page = ({title}) => ({
     plugins: [
         new MiniHtmlWebpackPlugin({
-            context: { title },
+            context: {title},
         }),
     ],
 })
@@ -35,7 +43,7 @@ exports.loadCss = () => ({
     },
 })
 
-exports.extractCss = ({ options = {}, loaders = [] } = {}) => {
+exports.extractCss = ({options = {}, loaders = []} = {}) => {
     return {
         module: {
             rules: [
@@ -43,13 +51,13 @@ exports.extractCss = ({ options = {}, loaders = [] } = {}) => {
                     test: /\.css$/,
                     sideEffects: true,
                     use: [
-                        { loader: MiniCssExtractPlugin.loader, options },
+                        {loader: MiniCssExtractPlugin.loader, options},
                         'css-loader',
                     ].concat(loaders),
                 },
             ],
         },
-        plugins: [new MiniCssExtractPlugin({ filename: '[name].css' })],
+        plugins: [new MiniCssExtractPlugin({filename: '[name].css'})],
     }
 }
 
@@ -82,13 +90,13 @@ exports.autoPrefix = () => ({
     },
 })
 
-exports.loadImages = ({ limit } = {}) => ({
+exports.loadImages = ({limit} = {}) => ({
     module: {
         rules: [
             {
                 test: /\.(jpg|png)$/,
                 type: 'asset',
-                parser: { dataUrlCondition: { maxSize: limit } },
+                parser: {dataUrlCondition: {maxSize: limit}},
             },
         ],
     },
@@ -98,13 +106,13 @@ const APP_SOURCE = path.join(__dirname, 'src')
 
 exports.loadJavaScript = () => ({
     module: {
-        rules: [{ test: /\.js$/, include: APP_SOURCE, use: 'babel-loader' }],
+        rules: [{test: /\.js$/, include: APP_SOURCE, use: 'babel-loader'}],
     },
 })
 
-const { ModuleFederationPlugin } = require('webpack').container
+const {ModuleFederationPlugin} = require('webpack').container
 
-exports.federateModule = ({ name, filename, exposes, remotes, shared }) => ({
+exports.federateModule = ({name, filename, exposes, remotes, shared}) => ({
     plugins: [
         new ModuleFederationPlugin({
             name,
