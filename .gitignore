@@ -1,0 +1,11 @@
+# Project exclude paths
+.idea
+/node_modules/
+/packages/app/node_modules/
+/packages/content/node_modules/
+/packages/footer/node_modules/
+/packages/header/node_modules/
+/packages/app/dist/
+/packages/header/dist/
+/packages/content/dist/
+/packages/footer/dist/
